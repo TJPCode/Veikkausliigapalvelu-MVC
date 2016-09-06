@@ -1,0 +1,26 @@
+﻿@using Veikkausliigapalvelu.Models
+@model FrontPageModel
+
+@{
+    ViewBag.Title = "Etusivu - Uutiset";
+}
+
+<script type="text/javascript" src="~/Scripts/bjqs-1.3.min.js"></script>
+<script type="text/javascript" src="~/Scripts/slider.js"></script>
+
+<div class="body-content">
+    @****Slider****@
+    <div id="banner-fade">
+        <ul class="bjqs">
+            @foreach (var item in Model.Slider)
+            {
+                <li>
+                    <img src='@Html.DisplayFor(modelItem => item.src)' title='@Html.DisplayFor(modelItem => item.title)' alt="">
+                </li>
+            }
+         </ul>
+    </div>   
+    @****Renders RssFeed and Footer****@
+    @Html.Partial("PartialRssFeed")
+    @Html.Partial("_Footer")
+</div>

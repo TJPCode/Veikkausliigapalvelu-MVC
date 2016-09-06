@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head> 
+    <meta charset="utf-8">
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/Images/favicon.ico")" rel="icon" type="image/png" />
+    <link href="@Url.Content("http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/themes/redmond/jquery-ui.css")" rel="Stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/bjqs.css")" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="~/Scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-ui-1.11.4.js"></script>
+    <script type="text/javascript" src="~/Scripts/datePicker.js"></script>
+    <script type="text/javascript" src="~/Scripts/datepicker-fi.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.secret-source.min.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">     
+            <header>
+                <div class="navbar-left">
+                    <ul>
+                        <li><img id="veikkaus-logo" src="/Content/Images/logo.png"/></li>
+                        <li>@Html.ActionLink("ETUSIVU", "Index", "Home")</li>
+                        <li>@Html.ActionLink("TULOKSET", "Matches", "Matches")</li>
+                        <li>@Html.ActionLink("TAULUKKO-DB", "LeagueTableDb", "LeagueTable")</li>
+                        <li>@Html.ActionLink("TAULUKKO-JSON", "LeagueTableJson", "LeagueTable")</li>
+                    </ul>
+                </div>
+                <div class="navbar-right">
+                    <img id="navbar-logos" src="/Content/Images/teams.png" />
+                </div>
+            </header>
+        </div>       
+    </div>
+    <div class="container">
+        @RenderBody()
+    </div>
+</body>
+</html>

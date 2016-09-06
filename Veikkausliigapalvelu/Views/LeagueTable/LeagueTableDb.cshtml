@@ -1,0 +1,97 @@
+﻿@using Veikkausliigapalvelu.Models
+@model List<LeagueTable>
+
+@{
+    ViewBag.Title = "Sarjataulukko";
+}
+
+<div class="body-content">   
+    <h2>Sarjataulukko 2015 - Tietokanta</h2>
+    Näyttää tietokannasta haetun datan sarjataulukkona. V, T, H, TM ja PM -sarakkeita muokkaamalla muuttuvat O, ME ja PISTEET -sarakkeiden arvot. Muutokset päivitetään tietokantaan, kun painetaan Päivitä sarjataulukko -nappia.
+
+    @*Prints league table.*@
+    @if (Model != null)
+    {
+        int rank = 1;
+        using (Html.BeginForm("UpdateDatabase", "LeagueTable", FormMethod.Post, new { @id = "leaguetable-form" }))
+        {
+            <table id="matches-table">
+                <thead>
+                    <tr>
+                        <th class="match-table-header lg-table-rank"></th>
+                        <th class="match-table-header lg-table-team" colspan="2">JOUKKUE</th>
+                        <th class="match-table-header lg-table-number">O</th>
+                        <th class="match-table-header lg-table-number">V</th>
+                        <th class="match-table-header lg-table-number">T</th>
+                        <th class="match-table-header lg-table-number">H</th>
+                        <th class="match-table-header lg-table-number">TM</th>
+                        <th class="match-table-header lg-table-number">PM</th>
+                        <th class="match-table-header lg-table-number">ME</th>
+                        <th class="match-table-header lg-table-points">PISTEET</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr>
+                            @if (@rank < 11)
+                            {
+                                <td class="match-table-header">@rank</td>                               
+                            }
+                            else
+                            {
+                                <td class="match-table-data lg-table-elimination">@rank</td>
+                            }
+                            <td class="match-table-data">
+                                <img class="team-logo" src="@Model[i].TeamLogoUrl" />
+                                @Html.HiddenFor(t => t[i].TeamID)
+                            </td>
+                            <td class="match-table-data">
+                                @Html.EditorFor(t => t[i].TeamName, new { htmlAttributes = new { @class = "text-box" } })
+                                @Html.ValidationMessageFor(t => t[i].TeamName, "Maksimipituus 20 merkkiä")
+                            </td>
+                            <td class="match-table-data">
+                                @Model[i].Matches
+                            </td>
+                            <td class="match-table-data">
+                                @Html.EditorFor(t => t[i].Wins, new { htmlAttributes = new { @class = "text-box" } })
+                                @Html.ValidationMessageFor(t => t[i].Wins, "Anna arvo väliltä 0-50")
+                            </td>
+                            <td class="match-table-data">
+                                @Html.EditorFor(t => t[i].Draws, new { htmlAttributes = new { @class = "text-box" } })
+                                @Html.ValidationMessageFor(t => t[i].Draws, "Anna arvo väliltä 0-50")
+                            </td>
+                            <td class="match-table-data">
+                                @Html.EditorFor(t => t[i].Loses, new { htmlAttributes = new { @class = "text-box" } })
+                                @Html.ValidationMessageFor(t => t[i].Loses, "Anna arvo väliltä 0-50")
+                            </td>
+                            <td class="match-table-data">
+                                @Html.EditorFor(t => t[i].GoalsFor, new { htmlAttributes = new { @class = "text-box" } })
+                                @Html.ValidationMessageFor(t => t[i].GoalsFor, "Anna arvo väliltä 0-200")
+                            </td>
+                            <td class="match-table-data">
+                                @Html.EditorFor(t => t[i].GoalsAgaints, new { htmlAttributes = new { @class = "text-box" } })
+                                @Html.ValidationMessageFor(t => t[i].GoalsAgaints, "Anna arvo väliltä 0-200")
+                            </td>
+                            <td class="match-table-data">
+                                @Model[i].GoalDifference
+                            </td>
+                            <td class="match-table-data">
+                                @Model[i].Points
+                            </td>
+                        </tr>
+                        rank++;
+                    }
+                </tbody>
+            </table>
+            <div class ="update-btn">
+                <input type="submit" value="Päivitä sarjataulukko"/>
+            </div>
+        }
+    }
+    else
+    {
+    <p class="error-text">Ongelmia tietokantayhteydessä. Tarkista tietokanta ja sen yhteys. Aja myös tarvittaessa Visual studio adminina.</p>
+    }
+    @Html.Partial("_Footer")
+</div>

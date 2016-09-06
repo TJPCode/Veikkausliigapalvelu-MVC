@@ -1,0 +1,64 @@
+﻿@using Veikkausliigapalvelu.Models
+@model List<LeagueTable>
+
+@{
+    ViewBag.Title = "Sarjataulukko";
+}
+
+<div class="body-content">   
+    <h2>Sarjataulukko 2015 - Json</h2>
+    Näyttää jsonista haetun datan sarjataulukkona. Json-tiedoston joukkueiden nimet on kirjoitettu CAPS LOCKILLA.
+
+    @*Prints league table.*@
+    @if (Model != null)
+    {
+        int rank = 1;
+        <table id="matches-table">
+            <thead>
+                <tr>
+                    <th class="match-table-header lg-table-rank"></th>
+                    <th class="match-table-header lg-table-team" colspan="2">JOUKKUE</th>                
+                    <th class="match-table-header lg-table-number">O</th>
+                    <th class="match-table-header lg-table-number">V</th>
+                    <th class="match-table-header lg-table-number">T</th>
+                    <th class="match-table-header lg-table-number">H</th>
+                    <th class="match-table-header lg-table-number">TM</th>
+                    <th class="match-table-header lg-table-number">PM</th>
+                    <th class="match-table-header lg-table-number">ME</th>
+                    <th class="match-table-header lg-table-points">PISTEET</th>
+                </tr>
+            </thead>
+            <tbody>           
+                @foreach (var team in Model)
+                {
+                    <tr>
+                        @if (@rank < 11)
+                        {
+                            <td class="match-table-header">@rank</td>
+                        }
+                        else
+                        {
+                            <td class="match-table-data lg-table-elimination">@rank</td>
+                        }
+                        <td class="match-table-data"><img class="team-logo" src="@team.TeamLogoUrl"/></td>
+                        <td class="match-table-data">@team.TeamName</td>
+                        <td class="match-table-data">@team.Matches</td>
+                        <td class="match-table-data">@team.Wins</td>
+                        <td class="match-table-data">@team.Draws</td>
+                        <td class="match-table-data">@team.Loses</td>
+                        <td class="match-table-data">@team.GoalsFor</td>
+                        <td class="match-table-data">@team.GoalsAgaints</td>
+                        <td class="match-table-data">@team.GoalDifference</td>
+                        <td class="match-table-data">@team.Points</td>
+                    </tr>
+                    rank++;
+                }       
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="error-text">Ongelmia jsonin purussa. Tarkista json-tiedoston polku.</p>
+    }
+    @Html.Partial("_Footer")
+</div>

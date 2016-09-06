@@ -1,0 +1,48 @@
+﻿@using Veikkausliigapalvelu.Models
+@model Match
+
+@{   
+    ViewBag.Title = "Ottelun tiedot";
+    DateTime dt = Convert.ToDateTime(Model.MatchDate);
+}
+<div class="body-content">
+    <h2>@Model.HomeTeam.FullName - @Model.AwayTeam.FullName, @dt.Day.@dt.Month.@dt.Year</h2>    
+    <table id="matches-table">
+        <thead>
+            <tr>
+                <th class="match-table-header details-header-1">@Model.HomeTeam.FullName</th>
+                <th class="match-table-header details-header-3"><img class="team-logo" src="@Model.HomeTeam.LogoUrl"/></th>
+                <th class="match-table-header details-header-2">@Model.HomeGoals - @Model.AwayGoals</th>
+                <th class="match-table-header details-header-3"><img class="team-logo" src="@Model.AwayTeam.LogoUrl"/></th>
+                <th class="match-table-header details-header-1">@Model.AwayTeam.FullName</th>
+            </tr>
+        </thead>
+        <tbody>
+            @*Loops all details of selected match and prints rows.*@
+            @foreach (var mEvent in Model.MatchEvents)
+            {
+                if (Model.HomeTeam.Id == mEvent.TeamId)
+                {
+                    <tr>
+                        <td class="match-table-data">@mEvent.Description</td>
+                        <td class="match-table-data"><img class="mini-logo" src="@mEvent.EventTypeIcon"/></td>
+                        <td class="match-table-data">@mEvent.EventMinute'</td>
+                        <td class="match-table-data"></td>
+                        <td class="match-table-data"></td>
+                    </tr>
+                }
+                else if (Model.AwayTeam.Id == mEvent.TeamId)
+                {
+                    <tr>
+                        <td class="match-table-data"></td>
+                        <td class="match-table-data"></td>
+                        <td class="match-table-data">@mEvent.EventMinute'</td>
+                        <td class="match-table-data"><img class="mini-logo" src="@mEvent.EventTypeIcon"/></td>
+                        <td class="match-table-data">@mEvent.Description</td>
+                    </tr>
+                }              
+            }                                            
+        </tbody>
+    </table>   
+    @Html.Partial("_Footer")
+</div>

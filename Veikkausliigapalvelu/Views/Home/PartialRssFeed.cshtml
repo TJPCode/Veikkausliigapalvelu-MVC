@@ -1,0 +1,49 @@
+﻿<div id="feed-partial">
+    @****RSS image and provider links****@
+    <div class="float-left">
+        <img id="rss-provider-logo" src="@Model.FeedImgUrl" />
+    </div>
+    <div class="float-right">
+        <ul>
+            <li>@Ajax.ActionLink("ILTA-SANOMAT", "PartialRssFeed", "Home", new { rss_source = "iltasanomat" }, new AjaxOptions { UpdateTargetId = "feed-partial", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "rss-link" }) </li>
+            <li>@Ajax.ActionLink("ILTALEHTI", "PartialRssFeed", "Home", new { rss_source = "iltalehti" }, new AjaxOptions { UpdateTargetId = "feed-partial", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "rss-link" }) </li>
+            <li>@Ajax.ActionLink("MTV SPORT", "PartialRssFeed", "Home", new { rss_source = "mtvsport" }, new AjaxOptions { UpdateTargetId = "feed-partial", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "rss-link" }) </li>
+        </ul>
+    </div>
+
+    @*Prints all rss-feed items of selected provider*@
+    @foreach (var feedItem in Model.Feed)
+    {
+        DateTime date = Convert.ToDateTime(feedItem.Date);  // Converts string date to DateTime.
+        string minutes = date.ToString("mm");               // Prevents minutes shown only with single number like (17:0).
+
+        <table id="rss-background">
+            <tr>
+                <td class="rss-date">
+                    <div class="float-left">
+                        <img class="rss-icon" src="/Content/Images/feed.png" />
+                    </div>
+                    <div class="float-left">
+                        <h6>Julkaistu @date.Day.@date.Month.@date.Year @date.Hour:@minutes</h6>
+                    </div>
+                </td>
+                @if (feedItem.Enclosure != "")
+                {
+                    <td rowspan="3">
+                        <img class="rss-image" src="@feedItem.Enclosure" />
+                    </td>
+                }
+            </tr>
+            <tr>
+                <td class="rss-link">
+                    <a href="@feedItem.Link" target="_blank">@System.Web.HttpUtility.HtmlDecode(feedItem.Title)</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="rss-description">
+                    @System.Web.HttpUtility.HtmlDecode(feedItem.Description)
+                </td>
+            </tr>
+        </table>
+    }
+</div>

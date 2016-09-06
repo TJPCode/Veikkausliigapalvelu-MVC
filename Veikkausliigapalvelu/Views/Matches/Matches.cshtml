@@ -1,0 +1,81 @@
+﻿@using Veikkausliigapalvelu.Models
+@model ResultsModel
+
+@{
+    ViewBag.Title = "Otteluohjelma";
+}
+
+<div class="body-content">  
+    <h2>Tulokset 2015</h2>      
+    <div id="date-form">
+        @using (Html.BeginForm("FilteredMatches", "Matches"))
+        {          
+            <div id="date-picker">
+                @Html.TextBox("startDate", "Alkupäivä")
+            </div>
+            <div id="date-picker">
+                @Html.TextBox("endDate", "Loppupäivä")
+            </div>
+            <div id="date-picker">
+                <input type="submit" value="Etsi aikaväliltä" id="button" />
+            </div>
+        }
+        @*Informs about search results.*@
+        <div id="search-result-text">
+            <span>@Model.SearchResultTxt</span>
+        </div>
+    </div>
+       
+    @*Draws a table if matches or search results found.*@
+    @if (Model.Matches != null && Model.Matches.Count != 0)
+    {
+        <table id="matches-table">
+            <thead>
+                <tr>
+                    <th class="match-table-header header1">PÄIVÄ</th>
+                    <th class="match-table-header header2">AIKA</th>
+                    <th class="match-table-header header3">OTTELU</th>
+                    <th class="match-table-header header4">TULOS</th>
+                    <th class="match-table-header header4">INFO</th>
+                </tr>
+            </thead>
+            <tbody>
+                @*Prints match rows.*@
+                @foreach (Match matchData in Model.Matches)
+                {
+                    DateTime date = Convert.ToDateTime(matchData.MatchDate);  // Converts string date to DateTime.
+                    string minutes = date.ToString("mm");                     // Prevents minutes shown only with single number like (17:0).
+
+                    <tr>
+                        <td class="match-table-data">@date.Day.@date.Month.@date.Year</td>
+                        <td class="match-table-data">@date.Hour:@minutes</td>
+                        <td class="match-table-data">@matchData.HomeTeam.Name - @matchData.AwayTeam.Name</td>
+                        <td class="match-table-data">
+                            <img class="mini-logo" src="@matchData.HomeTeam.LogoUrl" />@matchData.HomeGoals - @matchData.AwayGoals
+                            <img class="mini-logo" src="@matchData.AwayTeam.LogoUrl" />
+                        </td>
+
+                        @* Shows icon as a link if there is matchdetails available.*@
+                        @if (@matchData.MatchEvents.Count > 0)
+                        {
+                            <td class="match-table-data">
+                                <a href="@Url.Action("MatchDetails", "Matches", new { matchId = matchData.Id }, null)">
+                                    <img class="mini-logo" src="@Url.Content("~/Content/Images/details-icon.png")">
+                                </a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="match-table-data"></td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    @if (Model.Matches == null)
+    {
+        <p class="error-text">Ongelmia json-tiedoston avaamisessa. Tarkista polku.</p>
+    }   
+    @Html.Partial("_Footer")
+</div>
